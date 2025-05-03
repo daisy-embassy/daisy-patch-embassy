@@ -17,3 +17,6 @@ critical-section = "1.2.0"
 defmt = "1.0.1"
 defmt-rtt = "1.0.0"
 panic-probe = { version = "1.0.0", features = ["print-defmt"] }
+ssd1306 = { version = "0.10.0", features = ["async"] }
+embedded-graphics = "0.8.1"
+embedded-hal-bus = "0.3.0"
