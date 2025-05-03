@@ -1,6 +1,8 @@
 #![no_std]
 #![no_main]
 
+mod oled;
+
 use daisy_embassy::new_daisy_board;
 use defmt::info;
 use embassy_executor::Spawner;
