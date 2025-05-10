@@ -39,4 +39,6 @@ pub async fn oled_task(
         Baseline::Top,
     )
     .draw(&mut display_spi);
+
+    display_spi.flush().await.unwrap();
 }
