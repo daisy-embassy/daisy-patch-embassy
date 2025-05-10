@@ -31,8 +31,12 @@ pub async fn oled_task(
         .text_color(fc)
         .background_color(bg)
         .build();
-    let text_h = text_style.font.character_size.height as i32;
 
-    let _ = Text::with_baseline("Hello!!", Point::new(0, 0), text_style, Baseline::Top)
-        .draw(&mut display_spi);
+    let _ = Text::with_baseline(
+        "Hello daisy-patch-embassy!!",
+        Point::new(0, 0),
+        text_style,
+        Baseline::Top,
+    )
+    .draw(&mut display_spi);
 }
