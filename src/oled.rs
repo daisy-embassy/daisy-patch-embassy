@@ -23,6 +23,7 @@ pub async fn oled_task(
         .reset(&mut rst, &mut embassy_time::Delay {})
         .await
         .expect("reset failed");
+    display_spi.init().await.unwrap();
     let fc = BinaryColor::On;
     let bg = BinaryColor::Off;
     let text_style = MonoTextStyleBuilder::new()
