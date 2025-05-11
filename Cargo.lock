@@ -191,7 +191,9 @@ dependencies = [
  "embassy-time",
  "embassy-usb",
  "embedded-graphics",
+ "embedded-hal-async",
  "embedded-hal-bus",
+ "grounded",
  "panic-probe",
  "ssd1306",
 ]

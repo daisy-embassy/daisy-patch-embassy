@@ -20,6 +20,10 @@ panic-probe = { version = "1.0.0", features = ["print-defmt"] }
 ssd1306 = { version = "0.10.0", features = ["async"] }
 embedded-graphics = "0.8.1"
 embedded-hal-bus = { version = "0.3.0", features = ["async"] }
+embedded-hal-async = "1.0.0"
+grounded = "0.2.0"
+
+
 [profile.release]
 codegen-units = 1
 debug = 2
