@@ -8,14 +8,10 @@ use embedded_graphics::{
 };
 use ssd1306::{prelude::*, Ssd1306Async};
 
+use crate::dma_spi::DmaSpi;
+
 #[embassy_executor::task]
-pub async fn oled_task(
-    spi: Spi<'static, Async>,
-    cs: Output<'static>,
-    dc: Output<'static>,
-    mut rst: Output<'static>,
-) {
-    let spi = embedded_hal_bus::spi::ExclusiveDevice::new_no_delay(spi, cs).unwrap();
+pub async fn oled_task(spi: DmaSpi<'static>, dc: Output<'static>, mut rst: Output<'static>) {
     let interface = SPIInterface::new(spi, dc);
     let mut display_spi = Ssd1306Async::new(interface, DisplaySize128x64, DisplayRotation::Rotate0)
         .into_buffered_graphics_mode();

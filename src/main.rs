@@ -1,6 +1,7 @@
 #![no_std]
 #![no_main]
 
+mod dma_spi;
 mod oled;
 
 use daisy_embassy::new_daisy_board;
@@ -32,7 +33,9 @@ async fn main(spawner: Spawner) {
     let dc = Output::new(daisy_p.pins.d9, gpio::Level::Low, gpio::Speed::Low);
     let rst = Output::new(daisy_p.pins.d30, gpio::Level::Low, gpio::Speed::Low);
 
-    spawner.must_spawn(oled_task(spi, cs, dc, rst));
+    let dma_spi = dma_spi::DmaSpi::new(spi, cs);
+
+    spawner.must_spawn(oled_task(dma_spi, dc, rst));
 
     let mut led = daisy_p.user_led;
 
