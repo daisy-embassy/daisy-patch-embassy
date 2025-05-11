@@ -20,3 +20,20 @@ panic-probe = { version = "1.0.0", features = ["print-defmt"] }
 ssd1306 = { version = "0.10.0", features = ["async"] }
 embedded-graphics = "0.8.1"
 embedded-hal-bus = { version = "0.3.0", features = ["async"] }
+[profile.release]
+codegen-units = 1
+debug = 2
+debug-assertions = false
+incremental = false
+lto = 'fat'
+opt-level = 's'
+overflow-checks = false
+
+# cargo build/run
+[profile.dev]
+codegen-units = 1
+debug = 2
+debug-assertions = true
+incremental = false
+opt-level = 3
+overflow-checks = true
