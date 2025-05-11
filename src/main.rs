@@ -17,7 +17,8 @@ use {defmt_rtt as _, panic_probe as _};
 
 #[embassy_executor::main]
 async fn main(spawner: Spawner) {
-    let p = embassy_stm32::init(Default::default());
+    let config = daisy_embassy::default_rcc();
+    let p = embassy_stm32::init(config);
     info!("Hello World!");
     let daisy_p = new_daisy_board!(p);
     let spi = Spi::new_txonly(
