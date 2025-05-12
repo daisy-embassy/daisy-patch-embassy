@@ -1,5 +1,6 @@
 use defmt::debug;
 use embassy_stm32::gpio::Output;
+use embedded_graphics::text::renderer::TextRenderer;
 use embedded_graphics::Drawable;
 use embedded_graphics::{
     mono_font::{ascii::FONT_6X10, MonoTextStyleBuilder},
@@ -32,9 +33,13 @@ pub async fn oled_task(spi: DmaSpi<'static>, dc: Output<'static>, mut rst: Outpu
         .background_color(bg)
         .build();
 
+    let text_h = text_style.line_height();
+
+    let _ = Text::with_baseline("Hello", Point::new(0, 0), text_style, Baseline::Top)
+        .draw(&mut display_spi);
     let _ = Text::with_baseline(
-        "Hello daisy-patch-embassy!!",
-        Point::new(0, 0),
+        "daisy-patch-embassy!!",
+        Point::new(0, text_h as i32),
         text_style,
         Baseline::Top,
     )
