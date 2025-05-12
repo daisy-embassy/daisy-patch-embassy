@@ -43,4 +43,7 @@ pub async fn oled_task(spi: DmaSpi<'static>, dc: Output<'static>, mut rst: Outpu
     debug!("flush display");
     display_spi.flush().await.unwrap();
     debug!("oled_task done");
+    loop {
+        embassy_time::Timer::after_secs(1).await;
+    }
 }
