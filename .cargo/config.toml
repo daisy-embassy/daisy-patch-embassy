@@ -8,7 +8,7 @@ rustflags = [
   # --- ADD following new flag ---
   "-C", "link-arg=-Tdefmt.x",
 ]
-linker = "flip-link"
+# linker = "flip-link"
 
 [build]
 target = "thumbv7em-none-eabihf" # Cortex-M4F and Cortex-M7F (with FPU)
