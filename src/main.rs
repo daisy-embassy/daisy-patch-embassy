@@ -8,7 +8,6 @@ mod usart_midi;
 use daisy_embassy::new_daisy_board;
 use defmt::info;
 use embassy_executor::Spawner;
-use embassy_stm32::pac::UART4;
 use embassy_stm32::peripherals;
 use embassy_stm32::usart;
 use embassy_stm32::{
