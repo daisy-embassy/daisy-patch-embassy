@@ -160,8 +160,9 @@ checksum = "790eea4361631c5e7d22598ecd5723ff611904e3344ce8720784c93e3d83d40b"
 
 [[package]]
 name = "daisy-embassy"
-version = "0.1.0"
-source = "git+https://github.com/Dicklessgreat/daisy-embassy.git?rev=e79de575a7b020aaba8138dd1837e6ba0b3e4b74#e79de575a7b020aaba8138dd1837e6ba0b3e4b74"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2f63aaf66d6e04fbe1a902e74198b6b1105bb3a0425f1c95f7a3a78f7d588e92"
 dependencies = [
  "cortex-m",
  "defmt 0.3.100",

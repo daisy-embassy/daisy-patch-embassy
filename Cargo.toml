@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-daisy-embassy = { git = "https://github.com/Dicklessgreat/daisy-embassy.git", rev = "e79de575a7b020aaba8138dd1837e6ba0b3e4b74", features = ["seed_1_2"], default-features = false}
+daisy-embassy = { version = "0.2.0", features = ["seed_1_2"], default-features = false }
 embassy-stm32 = { version = "0.2.0", features = ["defmt", "stm32h750ib", "time-driver-tim5", "exti", "memory-x", "unstable-pac", "chrono"] }
 embassy-time = { version = "0.4.0", features = ["defmt", "defmt-timestamp-uptime", "tick-hz-32_768"] }
 embassy-sync = { version = "0.6.2", features = ["defmt"] }
