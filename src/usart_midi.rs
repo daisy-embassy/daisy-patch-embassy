@@ -8,6 +8,13 @@ use midly::{
     MidiMessage,
 };
 
+const SIZE: usize = 256;
+//DMA buffer must be in special region. Refer https://embassy.dev/book/#_stm32_bdma_only_working_out_of_some_ram_regions
+// #[link_section = ".sram1_bss"]
+// static TX_BUFFER: GroundedArrayCell<u8, SIZE> = GroundedArrayCell::uninit();
+#[link_section = ".sram1_bss"]
+static RX_BUFFER: GroundedArrayCell<u8, SIZE> = GroundedArrayCell::uninit();
+
 #[embassy_executor::task]
 pub async fn midi_task(usart: Uart<'static, Async>) {
     let (_tx, rx) = usart.split();
@@ -20,8 +27,11 @@ pub async fn rx_task(mut rx: UartRx<'static, Async>) -> ! {
     // Create a MIDI stream to handle incoming MIDI messages
     let mut midi_stream = MidiStream::new();
 
-    // Buffer to hold incoming bytes
-    let mut buffer = [0u8; 256];
+    let buffer: &mut [u8] = unsafe {
+        RX_BUFFER.initialize_all_copied(0);
+        let (ptr, len) = RX_BUFFER.get_ptr_len();
+        core::slice::from_raw_parts_mut(ptr, len)
+    };
 
     loop {
         // Read bytes from the USART
