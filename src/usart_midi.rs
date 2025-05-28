@@ -6,12 +6,17 @@ use embassy_stm32::{
 use grounded::uninit::GroundedArrayCell;
 use midly::{live::LiveEvent, stream::MidiStream, MidiMessage};
 
-const SIZE: usize = 256;
+// The size of the TX/RX buffer.
+//
+// It's set to 1 byte to ensure immediate processing of MIDI messages.
+// However, I'm uncertain if this is the optimal size.
+// More efficient handling might be possible with.
+const BUFFER_SIZE: usize = 1;
 //DMA buffer must be in special region. Refer https://embassy.dev/book/#_stm32_bdma_only_working_out_of_some_ram_regions
 // #[link_section = ".sram1_bss"]
 // static TX_BUFFER: GroundedArrayCell<u8, SIZE> = GroundedArrayCell::uninit();
 #[link_section = ".sram1_bss"]
-static RX_BUFFER: GroundedArrayCell<u8, SIZE> = GroundedArrayCell::uninit();
+static RX_BUFFER: GroundedArrayCell<u8, BUFFER_SIZE> = GroundedArrayCell::uninit();
 
 #[embassy_executor::task]
 pub async fn midi_task(usart: Uart<'static, Async>) {
