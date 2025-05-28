@@ -1,13 +1,10 @@
+use defmt::info;
 use embassy_stm32::{
     mode::Async,
     usart::{Uart, UartRx},
 };
 use grounded::uninit::GroundedArrayCell;
-use midly::{
-    live::{LiveEvent, SystemCommon},
-    stream::MidiStream,
-    MidiMessage,
-};
+use midly::{live::LiveEvent, stream::MidiStream, MidiMessage};
 
 const SIZE: usize = 256;
 //DMA buffer must be in special region. Refer https://embassy.dev/book/#_stm32_bdma_only_working_out_of_some_ram_regions
@@ -36,14 +33,14 @@ pub async fn rx_task(mut rx: UartRx<'static, Async>) -> ! {
 
     loop {
         // Read bytes from the USART
-        if let Err(e) = rx.read(&mut buffer).await {
+        if let Err(e) = rx.read(buffer).await {
             // Handle read error (e.g., log it, retry, etc.)
             defmt::error!("Failed to read from USART: {:?}", e);
             continue;
         }
 
         // Handle the MIDI data received
-        handle_midi(&mut midi_stream, &buffer);
+        handle_midi(&mut midi_stream, buffer);
     }
 }
 
@@ -66,11 +63,7 @@ fn handle_midi(stream: &mut MidiStream, new_bytes: &[u8]) {
                     vel.as_int()
                 );
             }
-            // and even things like sysex
-            LiveEvent::Common(SystemCommon::SysEx(sysex)) => {
-                // ...
-            }
-            _ => {}
+            _ => info!("Unhandled MIDI event"),
         }
     });
 }
