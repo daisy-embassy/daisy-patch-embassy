@@ -22,7 +22,7 @@ embedded-graphics = "0.8.1"
 embedded-hal-bus = { version = "0.3.0", features = ["async"] }
 embedded-hal-async = "1.0.0"
 grounded = "0.2.0"
-
+midly = { version = "0.5.3", default-features = false }
 
 [profile.release]
 codegen-units = 1
