@@ -2,6 +2,7 @@ use embassy_stm32::{
     mode::Async,
     usart::{Uart, UartRx},
 };
+use grounded::uninit::GroundedArrayCell;
 use midly::{
     live::{LiveEvent, SystemCommon},
     stream::MidiStream,
