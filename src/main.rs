@@ -46,6 +46,8 @@ async fn main(spawner: Spawner) {
 
     spawner.must_spawn(oled_task(dma_spi, dc, rst));
 
+    let mut config = usart::Config::default();
+    config.baudrate = 32_150; // MIDI baud rate
     let uart = defmt::unwrap!(embassy_stm32::usart::Uart::new(
         p.USART1,
         daisy_p.pins.d14,
@@ -53,7 +55,7 @@ async fn main(spawner: Spawner) {
         Irqs,
         p.DMA1_CH4,
         p.DMA1_CH5,
-        Default::default(),
+        config,
     ));
     spawner.must_spawn(midi_task(uart));
 
