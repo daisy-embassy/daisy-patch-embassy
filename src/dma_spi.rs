@@ -1,3 +1,4 @@
+use dma_accessible::{DmaBuffer, Sram1};
 use embassy_stm32::{gpio, mode::Async, spi::Spi};
 use embedded_hal_async::{
     delay::DelayNs,
@@ -15,8 +16,8 @@ static RX_BUFFER: GroundedArrayCell<u8, SIZE> = GroundedArrayCell::uninit();
 pub struct DmaSpi<'a> {
     spi: Spi<'a, Async>,
     cs: gpio::Output<'a>,
-    tx_buffer: &'static mut [u8],
-    rx_buffer: &'static mut [u8],
+    tx_buffer: DmaBuffer<u8, Sram1>,
+    rx_buffer: DmaBuffer<u8, Sram1>,
 }
 
 impl<'a> DmaSpi<'a> {
@@ -35,8 +36,8 @@ impl<'a> DmaSpi<'a> {
         Self {
             spi,
             cs,
-            tx_buffer,
-            rx_buffer,
+            tx_buffer: DmaBuffer::new(tx_buffer),
+            rx_buffer: DmaBuffer::new(rx_buffer),
         }
     }
 }
@@ -52,14 +53,14 @@ impl SpiBus<u8> for DmaSpi<'_> {
 
     async fn write(&mut self, words: &[u8]) -> Result<(), Self::Error> {
         let len = words.len();
-        let buf_slice = &mut self.tx_buffer[0..len];
+        let buf_slice = &mut self.tx_buffer.as_mut_slice()[0..len];
         buf_slice.copy_from_slice(words);
         self.spi.write(buf_slice).await
     }
 
     async fn read(&mut self, words: &mut [u8]) -> Result<(), Self::Error> {
         let len = words.len();
-        let buf_slice = &mut self.rx_buffer[0..len];
+        let buf_slice = &mut self.rx_buffer.as_mut_slice()[0..len];
         self.spi.read(buf_slice).await?;
         words.copy_from_slice(buf_slice);
         Ok(())
@@ -68,14 +69,14 @@ impl SpiBus<u8> for DmaSpi<'_> {
     async fn transfer(&mut self, read: &mut [u8], write: &[u8]) -> Result<(), Self::Error> {
         let rx_slice = {
             let len = read.len();
-            &mut self.rx_buffer[0..len]
+            &mut self.rx_buffer.as_mut_slice()[0..len]
         };
 
         let tx_slice = {
             let len = write.len();
-            let s = &mut self.tx_buffer[0..len];
+            let s = &mut self.tx_buffer.as_mut_slice()[0..len];
             s.copy_from_slice(write);
-            &mut self.tx_buffer[0..len]
+            &mut self.tx_buffer.as_mut_slice()[0..len]
         };
         self.spi.transfer(rx_slice, tx_slice).await?;
         read.copy_from_slice(rx_slice);
@@ -85,7 +86,7 @@ impl SpiBus<u8> for DmaSpi<'_> {
     // todo! I'm not sure if this is correct
     async fn transfer_in_place(&mut self, words: &mut [u8]) -> Result<(), Self::Error> {
         let len = words.len();
-        let buf_slice = &mut self.tx_buffer[0..len];
+        let buf_slice = &mut self.tx_buffer.as_mut_slice()[0..len];
         self.spi.transfer_in_place(buf_slice).await?;
         words.copy_from_slice(buf_slice);
         Ok(())
