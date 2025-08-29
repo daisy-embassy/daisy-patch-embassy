@@ -185,6 +185,7 @@ dependencies = [
  "daisy-embassy",
  "defmt 1.0.1",
  "defmt-rtt",
+ "dma-accessible",
  "embassy-executor",
  "embassy-futures",
  "embassy-stm32",
@@ -314,6 +315,11 @@ dependencies = [
  "embedded-hal 1.0.0",
  "embedded-hal-async",
 ]
+
+[[package]]
+name = "dma-accessible"
+version = "0.1.0"
+source = "git+https://github.com/daisy-embassy/dma-accessible.git?rev=52f779b53b5c2c157190ccbcd49d2937edee42de#52f779b53b5c2c157190ccbcd49d2937edee42de"
 
 [[package]]
 name = "document-features"
